@@ -557,7 +557,7 @@ saveButton.addEventListener("click", async () => {
 
         
 
-        const blob = await new Promise(resolve => {
+const blob = await new Promise(resolve => {
     canvas.toBlob(resolve, "image/png");
 });
 
@@ -567,19 +567,82 @@ if (!blob) {
 
 const url = URL.createObjectURL(blob);
 
-const link = document.createElement("a");
-link.download = "SevenBarcodeLabel_A4横.png";
-link.href = url;
+// iPhone / iPadの場合
+const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-document.body.appendChild(link);
-link.click();
-link.remove();
+if (isIOS) {
+    // iPhoneでは画像を画面に表示して、
+    // 長押しして写真へ保存できるようにする
+    const overlay = document.createElement("div");
 
-setTimeout(() => {
-    URL.revokeObjectURL(url);
-}, 1000);
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0,0,0,0.95)";
+    overlay.style.zIndex = "99999";
+    overlay.style.display = "flex";
+    overlay.style.flexDirection = "column";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.padding = "20px";
+    overlay.style.boxSizing = "border-box";
 
-        link.remove();
+    const message = document.createElement("div");
+
+    message.textContent =
+        "画像を長押しして「写真に保存」してください";
+
+    message.style.color = "#ffffff";
+    message.style.fontSize = "18px";
+    message.style.fontWeight = "bold";
+    message.style.textAlign = "center";
+    message.style.marginBottom = "15px";
+
+    const image = document.createElement("img");
+
+    image.src = url;
+    image.style.maxWidth = "100%";
+    image.style.maxHeight = "80vh";
+    image.style.objectFit = "contain";
+    image.style.background = "#ffffff";
+
+    const closeButton = document.createElement("button");
+
+    closeButton.textContent = "閉じる";
+    closeButton.style.marginTop = "15px";
+    closeButton.style.padding = "10px 25px";
+    closeButton.style.fontSize = "16px";
+
+    closeButton.addEventListener("click", () => {
+        URL.revokeObjectURL(url);
+        overlay.remove();
+    });
+
+    overlay.appendChild(message);
+    overlay.appendChild(image);
+    overlay.appendChild(closeButton);
+
+    document.body.appendChild(overlay);
+
+} else {
+    // PCでは今まで通り自動ダウンロード
+    const link = document.createElement("a");
+
+    link.download = "SevenBarcodeLabel_A4横.png";
+    link.href = url;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => {
+        URL.revokeObjectURL(url);
+    }, 1000);
+}
 
 
     } catch (error) {
