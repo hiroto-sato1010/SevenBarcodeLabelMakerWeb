@@ -555,20 +555,29 @@ saveButton.addEventListener("click", async () => {
         // ダウンロード
         // =================================================
 
-        const link =
-            document.createElement("a");
+        
 
-        link.download =
-            "SevenBarcodeLabel_A4横.png";
+        const blob = await new Promise(resolve => {
+    canvas.toBlob(resolve, "image/png");
+});
 
-        link.href =
-            canvas.toDataURL(
-                "image/png"
-            );
+if (!blob) {
+    throw new Error("PNGデータの作成に失敗しました。");
+}
 
-        document.body.appendChild(link);
+const url = URL.createObjectURL(blob);
 
-        link.click();
+const link = document.createElement("a");
+link.download = "SevenBarcodeLabel_A4横.png";
+link.href = url;
+
+document.body.appendChild(link);
+link.click();
+link.remove();
+
+setTimeout(() => {
+    URL.revokeObjectURL(url);
+}, 1000);
 
         link.remove();
 
