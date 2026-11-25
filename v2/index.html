@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>焼成パンラベルメーカー</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- =========================
+         EAN-13バーコード生成
+    ========================== -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+    <!-- =========================
+         PNG保存用
+    ========================== -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- =========================
+             タイトル
+        ========================== -->
+
+        <h1>
+            焼成パンラベルメーカー
+        </h1>
+
+
+        <!-- =========================
+             商品名
+        ========================== -->
+
+        <div class="form-group">
+
+            <label for="productNameLine1">
+                商品名
+            </label>
+
+            <input
+                type="text"
+                id="productNameLine1"
+                placeholder="商品名を入力"
+            >
+
+        </div>
+
+
+        <!-- =========================
+             商品名2段目
+        ========================== -->
+
+        <div class="form-group">
+
+            <label for="productNameLine2">
+                商品名 2段目（任意）
+            </label>
+
+            <input
+                type="text"
+                id="productNameLine2"
+                placeholder="2段目を入力"
+            >
+
+        </div>
+
+
+        <!-- =========================
+             JANコード
+        ========================== -->
+
+        <div class="form-group">
+
+            <label for="barcodeNumber">
+                JANコード
+            </label>
+
+            <input
+                type="text"
+                id="barcodeNumber"
+                maxlength="13"
+                inputmode="numeric"
+                placeholder="13桁のJANコード"
+            >
+
+        </div>
+
+
+        <!-- =========================
+             画像（任意）
+        ========================== -->
+
+        <div class="form-group">
+
+            <label for="imageInput">
+                画像（任意）
+            </label>
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+            >
+
+            <button
+                type="button"
+                id="clearImageButton"
+                style="display: none;"
+            >
+                画像を削除
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             PNG保存ボタン
+        ========================== -->
+
+        <button
+            id="saveButton"
+            disabled
+        >
+            A4横PNGで保存
+        </button>
+
+
+        <!-- =========================
+             プレビュー
+        ========================== -->
+
+        <h2 class="preview-title">
+            プレビュー
+        </h2>
+
+        <div id="preview">
+
+            ここにラベルが表示されます
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         メインJavaScript
+    ========================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
